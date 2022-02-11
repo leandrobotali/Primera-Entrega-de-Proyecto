@@ -23,13 +23,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/productos', productosRouter);
 app.use('/api/carrito', carritoRouter);
 
-port = process.env.port || 8080
-
-const server = app.listen(port,() => {
-    console.log(`puerto ${server.address().port}`);
-})
+app.use((req, res) => {
+    res.json({
+    error: {
+        error: -2,
+        descripcion: `Ruta ${req.originalUrl} y metodo ${req.method} no implementados`
+}})});
 
 app.use(function(err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Algo salio mal, volve a intentarlo');
 });
+port = process.env.port || 8080
+
+const server = app.listen(port,() => {
+    console.log(`puerto ${server.address().port}`);
+})
